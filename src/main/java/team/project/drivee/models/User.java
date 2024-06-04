@@ -5,6 +5,9 @@ import org.hibernate.annotations.ColumnDefault;
 import team.project.drivee.models.Trip;
 import team.project.drivee.models.Vehicle;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -54,6 +57,13 @@ public class User {
 
     @OneToMany(mappedBy = "driver")
     private Set<Trip> trips_driver = new LinkedHashSet<>();
+
+    public String encrytString(String input) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        byte[] digest = md.digest(input.getBytes());
+        BigInteger bigInt = new BigInteger(1, digest);
+        return bigInt.toString(16);
+    }
 
 
     public Boolean getTypeAcc() {
@@ -121,11 +131,19 @@ public class User {
     }
 
     public String getPassword() {
-        return password;
+        try {
+            return encrytString(password);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        try {
+            this.password = encrytString(password);
+        } catch (NoSuchAlgorithmException e) {
+            System.out.println("Ошибка при хэшировании пароля");
+        }
     }
 
     public byte[] getPhoto() {
