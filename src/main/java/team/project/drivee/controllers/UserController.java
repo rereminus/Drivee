@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import team.project.drivee.models.User;
 import team.project.drivee.service.UserService;
@@ -30,14 +31,14 @@ public class UserController {
 
     @PostMapping("/register")
     public String Register(@ModelAttribute User user) {
-        System.out.println("register request: "+ user);
+        //System.out.println("register request: "+ user)
         User registeredUser = userService.registerUser(user.getEmail(), user.getPassword());
         return registeredUser == null ? "error_page" : "redirect:/login";
     }
 
     @PostMapping("/login")
     public String Login(@ModelAttribute User user, Model model) {
-        System.out.println("login request: "+ user);
+        //System.out.println("login request: "+ user);
         User authenticatedUser = userService.authentication(user.getEmail(), user.getPassword());
         if (authenticatedUser != null){
             model.addAttribute("userEmail", authenticatedUser.getEmail());
@@ -47,5 +48,16 @@ public class UserController {
             return "error_page";
         }
     }
+
+    @GetMapping("/personal_page")
+    public String getPersonalAccount(Model model) {
+        return "personal_page";
+    }
+
+//    @PatchMapping("/personal_page")
+//    public String refreshAccount(@ModelAttribute User user, Model model) {
+//        User authenticatedUser = userService.authentication(user.getEmail(), user.getPassword());
+//
+//    }
 
 }

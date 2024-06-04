@@ -31,4 +31,9 @@ public class UserService {
     public User authentication(String email, String password){
         return userRepository.findByEmailAndPassword(email, password).orElse(null);
     }
+
+//    public User refreshUser(String email, String password, byte[] photo){
+//        User user = userRepository.findFirstByEmail(email).orElse(null);
+//
+//    }
 }

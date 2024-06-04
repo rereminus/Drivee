@@ -17,7 +17,7 @@ body::before {
     opacity: 0.8;
 }
 
-.form {
+form {
     position: absolute;
     top: 50%;
     left: 25%;
