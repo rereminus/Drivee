@@ -1,6 +1,7 @@
 package team.project.drivee.models;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
@@ -9,6 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "vehicles")
+@Data
 public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,8 +39,19 @@ public class Vehicle {
     @Column(name = "max_weight", nullable = false, precision = 5, scale = 2)
     private BigDecimal maxWeight;
 
-    @OneToMany(mappedBy = "vehicle")
-    private Set<User> users = new LinkedHashSet<>();
+    @OneToOne(mappedBy = "vehicle")
+    private User user = new User();
+
+//    public Vehicle(String regNo, String brand, String color, BigDecimal length,
+//                   BigDecimal width, BigDecimal height, BigDecimal maxWeight) {
+//        this.regNo = regNo;
+//        this.brand = brand;
+//        this.color = color;
+//        this.length = length;
+//        this.width = width;
+//        this.height = height;
+//        this.maxWeight = maxWeight;
+//    }
 
     public Integer getId() {
         return id;
@@ -104,12 +117,11 @@ public class Vehicle {
         this.maxWeight = maxWeight;
     }
 
-    public Set<User> getUsers() {
-        return users;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
+    public void setUser(User user) {
+        this.user = user;
     }
-
 }

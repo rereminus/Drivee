@@ -2,14 +2,14 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Личный кабинет</title>
+    <title>Редактирование профиля</title>
 </head>
-<!--тут просто режим чтения-->
 <body>
-<form method="post" action="/account" enctype="multipart/form-data">
+<form method="post" th:action="@{/account/{id}/edit(id=${user.id})}" th:object="${user}" enctype="multipart/form-data">
+    <input type="hidden" th:field="*{id}">
     <div class="input-box">
         <i class="fa fa-user" aria-hidden="true"></i>
-        <input type="email" name="username" id="email" placeholder="Электронная почта" required>
+        <input type="email" name="email" placeholder="Электронная почта" required th:field="*{email}">
     </div>
     <div class="input-box">
         <i class="fa fa-unlock-alt" aria-hidden="true"></i>
@@ -18,7 +18,7 @@
     <label>Фото</label>
     <input name="photo" type="file" accept="image/png, image/jpeg"/> <span>ссылка на фото??</span>
     <div class="input-box">
-        <input type="submit" name="sign-in" value="Login">
+        <input type="submit" value="Сохранить">
     </div>
 </form>
 </body>

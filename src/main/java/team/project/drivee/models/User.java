@@ -1,19 +1,21 @@
 package team.project.drivee.models;
 
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import team.project.drivee.models.Trip;
-import team.project.drivee.models.Vehicle;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import team.project.drivee.models.Enum.Role;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "users")
-public class User {
+@Data
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_id_gen")
     @SequenceGenerator(name = "users_id_gen", sequenceName = "users_id_seq", allocationSize = 1)
@@ -29,13 +31,13 @@ public class User {
     @Column(name = "l_name")
     private String lName;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "phone")
+    @Column(name = "phone", unique = true)
     private String phone;
 
-    @Column(name = "password", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "password", length = Integer.MAX_VALUE)
     private String password;
 
     @Column(name = "photo")
@@ -45,11 +47,11 @@ public class User {
     private Integer numberOfMovers;
 
     @ColumnDefault("false")
-    @Column(name = "type_acc", nullable = false)
+    @Column(name = "type_acc")
     private Boolean typeAcc = false;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vehicle_id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vehicle_id", unique = true)
     private Vehicle vehicle;
 
     @OneToMany(mappedBy = "client")
@@ -58,12 +60,11 @@ public class User {
     @OneToMany(mappedBy = "driver")
     private Set<Trip> trips_driver = new LinkedHashSet<>();
 
-    public String encrytString(String input) throws NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("MD5");
-        byte[] digest = md.digest(input.getBytes());
-        BigInteger bigInt = new BigInteger(1, digest);
-        return bigInt.toString(16);
-    }
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "roles",
+            joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles = new HashSet<>();
 
 
     public Boolean getTypeAcc() {
@@ -76,10 +77,6 @@ public class User {
 
     public Set<Trip> getTrips_driver() {
         return trips_driver;
-    }
-
-    public void setTrips_driver(Set<Trip> trips_driver) {
-        this.trips_driver = trips_driver;
     }
 
     public Integer getId() {
@@ -130,20 +127,18 @@ public class User {
         this.phone = phone;
     }
 
-    public String getPassword() {
-        try {
-            return encrytString(password);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
     }
 
     public void setPassword(String password) {
-        try {
-            this.password = encrytString(password);
-        } catch (NoSuchAlgorithmException e) {
-            System.out.println("Ошибка при хэшировании пароля");
-        }
+            this.password = password;
     }
 
     public byte[] getPhoto() {
@@ -178,4 +173,13 @@ public class User {
     public void setTrips(Set<Trip> trips) {
         this.trips = trips;
     }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
 }
