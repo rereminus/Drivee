@@ -14,6 +14,7 @@ import team.project.drivee.service.VehicleService;
 
 import java.math.BigDecimal;
 import java.security.Principal;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 @Controller
@@ -44,6 +45,7 @@ public class MainController {
     @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
     @PostMapping("/trip")
     public String tripAdd(Model model, Trip trip) {
+        trip.setCreatedTime(OffsetDateTime.from(java.time.LocalDateTime.now()));
         tripService.addTrip(trip);
         return "trip";
     }

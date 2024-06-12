@@ -27,4 +27,6 @@ public class TripService {
     public void addTrip(Trip trip){
         tripRepository.save(trip);
     }
+
+
 }
