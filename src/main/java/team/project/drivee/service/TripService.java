@@ -1,6 +1,7 @@
 package team.project.drivee.service;
 
 import org.springframework.stereotype.Service;
+import team.project.drivee.models.Trip;
 import team.project.drivee.models.Vehicle;
 import team.project.drivee.repo.TripRepository;
 import team.project.drivee.repo.VehicleRepository;
@@ -21,5 +22,9 @@ public class TripService {
 
     public List<Vehicle> findDriver(BigDecimal weight){
         return  vehicleRepository.findAllByMaxWeightLessThanEqual(weight);
+    }
+
+    public void addTrip(Trip trip){
+        tripRepository.save(trip);
     }
 }

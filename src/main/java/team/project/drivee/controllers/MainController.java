@@ -36,8 +36,15 @@ public class MainController {
 
     @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping("/trip")
-    public String trip(Model model, Trip trip) {
-        model.addAttribute("trip", trip);
+    public String trip(Model model) {
+        model.addAttribute("trip", new Trip());
+        return "trip";
+    }
+
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
+    @PostMapping("/trip")
+    public String tripAdd(Model model, Trip trip) {
+        tripService.addTrip(trip);
         return "trip";
     }
 

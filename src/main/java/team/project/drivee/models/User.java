@@ -2,7 +2,6 @@ package team.project.drivee.models;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import team.project.drivee.models.Enum.Role;

@@ -18,9 +18,9 @@
     <input type="checkbox" id="checkbox3" name="checkbox3" value="Dangerous">
     <label for="checkbox3">Пожароопасное</label><br>
     <input type="number" name="tripCost" id="tripCost" th:field="*{tripCost}">
-    <input type="radio" name="payment" id="true" th:field="*{paymentType}">
+    <input type="radio" name="payment" id="true" th:field="*{paymentType}" value="nal">
     <label for="true">Наличная оплата</label>
-    <input type="radio" name="payment" id="false" th:field="*{paymentType}">
+    <input type="radio" name="payment" id="false" th:field="*{paymentType}" value="beznal">
     <label for="true">СБП</label><br>
     <label for="weight">Масса груза</label>
     <input type="number" step="0.1" name="weight" id="weight">

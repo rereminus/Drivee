@@ -1,6 +1,7 @@
 package team.project.drivee.models;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
@@ -9,6 +10,7 @@ import java.time.OffsetTime;
 
 @Entity
 @Table(name = "trips")
+@Data
 public class Trip {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

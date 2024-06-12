@@ -9,16 +9,13 @@
 <form method="post" th:action="@{/trip/find}" th:object="${trip}">
     <input type="number" step="0.1" name="weight" id="weight">
     <input type="submit" value="Найти">
-</form>
-<form th:action="@{trip/found}" method="post">
-<!-- тут нужно перечисление доступных отсортированных машин -->
-
+<!--    Перечисление машин для выбора   -->
 <!--    <table>-->
-<!--        <tbody>-->
-<!--        #foreach( $veh in $vehicles )-->
-<!--        <tr><td>$veh.width</td><td>$veh.height</td></tr>-->
-<!--        #end-->
-<!--        </tbody>-->
+<!--        <tr th:each="user : ${found}">-->
+<!--            <td th:text="${user.username}"></td>-->
+<!--        <tr th:each="meal : ${user.meals}">-->
+<!--            <td th:text="${meal.mealName}"></td>-->
+<!--        </tr>-->
 <!--    </table>-->
 </form>
 </body>

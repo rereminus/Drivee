@@ -4,4 +4,13 @@
     <option name="reLastEntityCreationPackage" value="src/main/java/team/project/drivee" />
     <option name="reverseEngineeringLastDbConnectionId" value="48b6ddfa-993e-49cf-9d1e-e54d4f3ce80a" />
   </component>
+  <component name="PersistenceUnitSettings">
+    <persistence-units>
+      <persistence-unit name="Default">
+        <packages>
+          <package value="team.project.drivee" />
+        </packages>
+      </persistence-unit>
+    </persistence-units>
+  </component>
 </project>
