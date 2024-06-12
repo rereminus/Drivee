@@ -9,7 +9,7 @@ import team.project.drivee.models.Enum.Role;
 
 import java.util.*;
 
-@Builder
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -31,7 +31,7 @@ public class User implements UserDetails {
     @Column(name = "l_name")
     private String lName;
 
-    @Column(name = "email", unique = true, nullable = false)
+    @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "phone", unique = true)
@@ -42,13 +42,6 @@ public class User implements UserDetails {
 
     @Column(name = "photo")
     private byte[] photo;
-
-    @Column(name = "number_of_movers")
-    private Integer numberOfMovers;
-
-    @ColumnDefault("false")
-    @Column(name = "type_acc")
-    private Boolean typeAcc = false;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vehicle_id", unique = true)
@@ -61,19 +54,11 @@ public class User implements UserDetails {
     private Set<Trip> trips_driver = new LinkedHashSet<>();
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "roles",
+    @CollectionTable(name = "roles_project",
             joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
-    private Set<Role> roles = new HashSet<>();
+    private Set<Role> name = new HashSet<>();
 
-
-    public Boolean getTypeAcc() {
-        return typeAcc;
-    }
-
-    public void setTypeAcc(Boolean typeAcc) {
-        this.typeAcc = typeAcc;
-    }
 
     public Set<Trip> getTrips_driver() {
         return trips_driver;
@@ -129,7 +114,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
+        return name;
     }
 
     @Override
@@ -147,14 +132,6 @@ public class User implements UserDetails {
 
     public void setPhoto(byte[] photo) {
         this.photo = photo;
-    }
-
-    public Integer getNumberOfMovers() {
-        return numberOfMovers;
-    }
-
-    public void setNumberOfMovers(Integer numberOfMovers) {
-        this.numberOfMovers = numberOfMovers;
     }
 
     public Vehicle getVehicle() {
@@ -175,11 +152,11 @@ public class User implements UserDetails {
     }
 
     public Set<Role> getRoles() {
-        return roles;
+        return name;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setRoles(Set<Role> name) {
+        this.name = name;
     }
 
 }

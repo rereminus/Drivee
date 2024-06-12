@@ -1,13 +1,15 @@
 package team.project.drivee.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "vehicles")
 @Data
@@ -18,7 +20,7 @@ public class Vehicle {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "reg_no", nullable = false, length = 10)
+    @Column(name = "reg_no", nullable = false, length = 10, unique = true)
     private String regNo;
 
     @Column(name = "brand", nullable = false, length = 20)
@@ -41,17 +43,6 @@ public class Vehicle {
 
     @OneToOne(mappedBy = "vehicle")
     private User user = new User();
-
-//    public Vehicle(String regNo, String brand, String color, BigDecimal length,
-//                   BigDecimal width, BigDecimal height, BigDecimal maxWeight) {
-//        this.regNo = regNo;
-//        this.brand = brand;
-//        this.color = color;
-//        this.length = length;
-//        this.width = width;
-//        this.height = height;
-//        this.maxWeight = maxWeight;
-//    }
 
     public Integer getId() {
         return id;

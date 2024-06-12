@@ -5,8 +5,23 @@
     <title>Автомобиль</title>
 </head>
 <body>
-<form method="post" th:object="${vehicle}">
-    <input type="text" th:field="*{id}">
-</form>>
+<form method="post" action="/account/vehicle" th:object="${vehicle}">
+    <label for="regNo">Рег номер</label>
+    <input type="text" id="regNo" name="regNo" th:field="*{regNo}" required>
+    <label for="brand">Бренд</label>
+    <input type="text" id="brand" name="brand" required>
+    <label for="color">Цвет</label>
+    <input type="text" id="color" name="color" required>
+    <label for="length">Длина</label>
+    <input type="number" id="length" name="length" required>
+    <label for="width">Ширина</label>
+    <input type="number" id="width" name="width" required>
+    <label for="height">Высота</label>
+    <input type="number" id="height" name="height" required>
+    <label for="maxWeight">Максимальный вес</label>
+    <input type="number" id="maxWeight" name="maxWeight" required>
+    <input type="submit" value="Добавить автомобиль">
+</form>
+<span th:field="${errorMsg}"></span>>
 </body>
 </html>

@@ -1,20 +1,20 @@
 package team.project.drivee.service;
 
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.util.ReflectionUtils;
-import org.springframework.util.StringUtils;
 import team.project.drivee.models.Enum.Role;
 import team.project.drivee.models.User;
 import team.project.drivee.repo.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Field;
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -24,7 +24,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder/*, UserMapper userMapper*/) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -44,41 +44,27 @@ public class UserService {
         return true;
     }
 
-//    public User authentication(String email, String password){
-//        return userRepository.findByEmailAndPassword(email, password).orElse(null);
-//    }
-//
-//    public User getUserById(String email, String password){
-//        return userRepository.findByEmailAndPassword(email, password).orElse(null);
+
+//    public void updateUser(User user){
+//        System.out.println(user.getFName());
+//        User existingUser = userRepository.findById(user.getId()).orElse(null);
+//        existingUser.setFName(user.getFName());
+//        existingUser.setMName(user.getMName());
+//        existingUser.setLName(user.getLName());
+//        existingUser.setPhone(user.getPhone());
+//        userRepository.save(existingUser);
 //    }
 
-//    public User refreshUserByFields(int id, Map<String, Object> fields){
-//        Optional<User> existingUser = userRepository.findById(id);
-//        if (existingUser.isPresent()){
-//            fields.forEach((key, value) ->{
-//                Field field = ReflectionUtils.findField(User.class, key);
-//                field.setAccessible(true);
-//                ReflectionUtils.setField(field, existingUser.get(), value);
-//            });
-//            return userRepository.save(existingUser.get());
-//        }
-//        return null;
-//    }
-
-    public void updateUser(User user) {
-        user = User.builder()
-                .id(user.getId())
-                .fName(user.getFName())
-                .mName(user.getMName())
-                .lName(user.getLName())
-                .email(user.getEmail())
-                .phone(user.getPhone())
-                .password(user.getPassword())
-                .photo(user.getPhoto())
-                .numberOfMovers(user.getNumberOfMovers())
-                .vehicle(user.getVehicle())
-                .typeAcc(user.getTypeAcc())
-                .build();
+    public void changeUserRole(User user, Map<String, String> form){
+        Set<String> roles = Arrays.stream(Role.values())
+                .map(Role::name)
+                .collect(Collectors.toSet());
+        user.getRoles().clear();
+        for (String key : form.keySet()){
+            if (roles.contains(key)){
+                user.getRoles().add(Role.valueOf(key));
+            }
+        }
         userRepository.save(user);
     }
 

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Перед началом</title>
+</head>
+<body>
+<span>Перед началом поездки введите данные, чтобы мы смогли найти подходящего водителя</span>
+<form method="post" th:action="@{/trip/find}" th:object="${trip}">
+    <input type="number" step="0.1" name="weight" id="weight">
+    <input type="submit" value="Найти">
+<!--    Перечисление машин для выбора   -->
+<!--    <table>-->
+<!--        <tr th:each="user : ${found}">-->
+<!--            <td th:text="${user.username}"></td>-->
+<!--        <tr th:each="meal : ${user.meals}">-->
+<!--            <td th:text="${meal.mealName}"></td>-->
+<!--        </tr>-->
+<!--    </table>-->
+</form>
+</body>
+</html>

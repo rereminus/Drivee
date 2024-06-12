@@ -1,6 +1,5 @@
 package team.project.drivee.controllers;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
@@ -10,13 +9,17 @@ import team.project.drivee.repo.UserRepository;
 import team.project.drivee.service.UserService;
 
 import java.security.Principal;
+import java.util.Arrays;
+import java.util.Map;
 
 @Controller
 public class UserController {
     private final UserService userService;
+    private final UserRepository userRepository;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, UserRepository userRepository) {
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/registration")
@@ -31,38 +34,34 @@ public class UserController {
         return "login_page";
     }
 
-
     @PostMapping("/registration")
-    public String Register(@ModelAttribute User user, Model model) {
+    public String Register(User user, Model model) {
         if (!userService.registerUser(user)) {
             model.addAttribute("errorMsg", "Пользователь с email: " + user.getEmail() + " уже существует");
             return "register_page";
         }
         return "redirect:/login";
     }
-    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
-    @GetMapping("/account/{user}")
-    public String getPersonalAccount(Model model, Principal principal,@PathVariable("user") User user) {
+
+    @GetMapping("/account")
+    public String PersonalAccount(Model model, Principal principal) {
+        User user = userService.getUserByPrincipal(principal);
         model.addAttribute("user", user);
-        model.addAttribute("userByPrincipal", userService.getUserByPrincipal(principal));
-        //model.addAttribute("roles", Role.values());
-        //model.addAttribute("typeAcc", user.getTypeAcc());
+        model.addAttribute("roles", Arrays.stream(Role.values()).filter(r -> !r.name().equals("ROLE_ADMIN")).toArray());
         return "personal_page";
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
-    @GetMapping("/account/{user}/edit")
-    public String getPersonalAccountEdit(Model model, Principal principal, @PathVariable("user") User user) {
-        model.addAttribute("user", user);
-        model.addAttribute("userByPrincipal", userService.getUserByPrincipal(principal));
-        return "personal_page_edit";
+    @PostMapping("/account")
+    public String updateAccount(Principal principal,@RequestParam("userId") User user, @RequestParam Map<String, String> form) {
+        //userService.updateUser(user);
+        userService.changeUserRole(user, form);
+        return "redirect:/account";
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
-    @PostMapping("/account/edit")
-    public String updateAccount(@ModelAttribute User user) {
-        userService.updateUser(user);
-        return "redirect:/personal_page_edit";
-    }
+//    @PostMapping("/account/role")
+//    public String changeRole(@RequestParam("userId") User user, @RequestParam Map<String, String> form){
+//        userService.changeUserRole(user, form);
+//        return "redirect:/account";
+//    }
 
 }

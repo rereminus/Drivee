@@ -25,22 +25,22 @@ public class Trip {
     @Column(name = "wait_time")
     private OffsetTime waitTime;
 
-    @Column(name = "created_time", nullable = false)
+    @Column(name = "created_time"/*, nullable = false*/)
     private OffsetDateTime createdTime;
 
-    @Column(name = "pickup_location", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "pickup_location", /*nullable = false,*/ length = Integer.MAX_VALUE)
     private String pickupLocation;
 
-    @Column(name = "dropoff_location", nullable = false, length = Integer.MAX_VALUE)
+    @Column(name = "dropoff_location"/*, nullable = false*/, length = Integer.MAX_VALUE)
     private String dropoffLocation;
 
     @Column(name = "comment", length = Integer.MAX_VALUE)
     private String comment;
 
-    @Column(name = "trip_cost", nullable = false, precision = 7, scale = 2)
+    @Column(name = "trip_cost"/*, nullable = false*/, precision = 7, scale = 2)
     private BigDecimal tripCost;
 
-    @Column(name = "trip_status", nullable = false, length = 10)
+    @Column(name = "trip_status"/*, nullable = false*/, length = 10)
     private String tripStatus;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -49,6 +49,18 @@ public class Trip {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "driver_id")
     private User driver;
+
+    @ColumnDefault("false")
+    @Column(name = "payment_type")
+    private Boolean paymentType;
+
+    public Boolean getPaymentType() {
+        return paymentType;
+    }
+
+    public void setPaymentType(Boolean paymentType) {
+        this.paymentType = paymentType;
+    }
 
     public Integer getId() {
         return id;
