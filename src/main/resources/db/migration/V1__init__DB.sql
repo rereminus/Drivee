@@ -42,7 +42,6 @@ CREATE TABLE public.users (
     email character varying(255) NOT NULL,
     phone character varying(255),
     password text NOT NULL,
-    photo bytea,
     vehicle_id integer,
     PRIMARY KEY (id)
 );

@@ -39,9 +39,6 @@ public class User implements UserDetails {
     @Column(name = "password", length = Integer.MAX_VALUE)
     private String password;
 
-    @Column(name = "photo")
-    private byte[] photo;
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vehicle_id", unique = true)
     private Vehicle vehicle;
@@ -123,14 +120,6 @@ public class User implements UserDetails {
 
     public void setPassword(String password) {
             this.password = password;
-    }
-
-    public byte[] getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(byte[] photo) {
-        this.photo = photo;
     }
 
     public Vehicle getVehicle() {
