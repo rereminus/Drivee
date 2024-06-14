@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список заказов</title>
+    <link rel="stylesheet" href="styles.css">    
+    <style>
+        table {
+           width: 100%;
+	       margin-bottom: 20px;
+	       border: 5px solid #fff;
+	       border-top: 5px solid #fff;
+	       border-bottom: 3px solid #fff;
+	       border-collapse: collapse; 
+	       outline: 3px solid #ffd300;
+	       font-size: 15px;
+	       background: #fff!important;
+        }
+
+        th, td {
+           padding: 7px;
+	       border: none;
+	       border-top: 3px solid #fff;
+	       border-bottom: 3px solid #fff;
+	       font-size: 15px;
+        }
+
+        th {
+           font-weight: bold;
+	       padding: 7px;
+	       background: #ffd300;
+	       border: none;
+	       text-align: left;
+	       font-size: 15px;
+	       border-top: 3px solid #fff;
+	       border-bottom: 3px solid #ffd300;
+        }
+		.table tbody tr:nth-child(even){
+	       background: #f8f8f8!important;
+	    }
+
+        .accept-button {
+            background: linear-gradient(to right, #d4ffdd, #ffad05);
+            border: none;
+            border-radius: 30px;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Список заказов</h1>
+    <table>
+        <tr>
+            <th>Начальная точка</th>
+            <th>Конечная точка</th>
+            <th>Описание</th>
+            <th>Тариф</th>
+            <th>Цена</th>
+            <th>Способ оплаты</th>
+            <th>Дата и время</th>
+            <th>Принять заказ</th>
+        </tr>
+        <tr>
+            <td id="startPoint"></td>
+            <td id="endPoint"></td>
+            <td id="description"></td>
+            <td id="tariff"></td>
+            <td id="price"></td>
+            <td id="paymentMethod"></td>
+            <td id="dateTime"></td>
+            <td><button class="accept-button" onclick="acceptOrder()">Принять</button></td>
+        </tr>
+    </table>
+
+    <script>
+        function acceptOrder() {
+            const startPoint = document.getElementById('startPoint').innerText;
+            const endPoint = document.getElementById('endPoint').innerText;
+            const description = document.getElementById('description').innerText;
+            const tariff = document.getElementById('tariff').innerText;
+            const price = document.getElementById('price').innerText;
+            const paymentMethod = document.getElementById('paymentMethod').innerText;
+            const dateTime = document.getElementById('dateTime').innerText;
+
+            
+            alert(`Заказ принят: \nНачальная точка: ${startPoint} \nКонечная точка: ${endPoint} \nОписание: ${description} \nТариф: ${tariff} \nЦена: ${price} \nСпособ оплаты: ${paymentMethod} \nДата и время: ${dateTime}`);
+        }
+		const acceptedOrder1 = {
+               startPoint: startPoint,
+               endPoint: endPoint,
+               description: description,
+               tariff: tariff,
+               price: price,
+               paymentMethod: paymentMethod,
+               dateTime: dateTime
+            };
+
+        localStorage.setItem('acceptedOrder1', JSON.stringify(acceptedOrder1));
+    </script>
+</body>
+</html>
