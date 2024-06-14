@@ -29,11 +29,11 @@ public class VehicleController {
         this.vehicleRepository = vehicleRepository;
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_DRIVER', 'ROLE_ADMIN')")
-    @GetMapping("/account/vehicle")
+    @PreAuthorize("hasAuthority('ROLE_DRIVER')")
+    @GetMapping("/vehicle")
     public String getVehicleInfo(Model model, Principal principal) {
         User user = userService.getUserByPrincipal(principal);
-        if (vehicleRepository.findByUser(user).isPresent()) {
+        if (vehicleRepository.findByUser(user) != null) {
             model.addAttribute("vehicle", vehicleRepository.findByUser(user));
         }
         else{
@@ -42,17 +42,15 @@ public class VehicleController {
         return "vehicle";
     }
 
-    @PreAuthorize("hasAnyAuthority('ROLE_DRIVER', 'ROLE_ADMIN')")
-    @PostMapping("/account/vehicle")
-    public String addVehiclePost(@RequestParam String regNo, @RequestParam String brand, @RequestParam String color,
-                                 @RequestParam BigDecimal length, @RequestParam BigDecimal width, @RequestParam BigDecimal height,
-                                 @RequestParam BigDecimal maxWeight, Principal principal, Model model) {
-        if (vehicleRepository.findByRegNo(regNo).isPresent()){
+    @PreAuthorize("hasAuthority('ROLE_DRIVER')")
+    @PostMapping("/vehicle")
+    public String addVehiclePost(Vehicle vehicle, Model model, Principal principal) {
+        if (vehicleRepository.findByRegNo(vehicle.getRegNo()).isPresent()){
             model.addAttribute("errorMsg", "Данный автомобиль уже зарегистрирован в системе");
-            return "redirect:/account/vehicle";
+            return "redirect:/account";
         }
-        vehicleService.addVehicle(principal, regNo, brand, color, length, width, height, maxWeight);
-        return "redirect:/";
+        vehicleService.addVehicle(vehicle, principal);
+        return "redirect:/order";
     }
 
 }

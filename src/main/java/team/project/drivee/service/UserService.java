@@ -31,41 +31,32 @@ public class UserService {
 
     public User getUserByPrincipal(Principal principal) {
         if (principal == null) return new User();
-        return userRepository.findByEmail(principal.getName());
+        return userRepository.findByPhone(principal.getName());
     }
 
-    public boolean registerUser(@NonNull User user){
-        if (userRepository.findByEmail(user.getEmail()) != null){
+    public boolean registerUser(@NonNull User user, boolean type){
+        if (userRepository.findByPhone(user.getPhone()) != null){
             return false;
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.getRoles().add(Role.ROLE_USER);
+        if (type){
+            user.getRoles().add(Role.ROLE_DRIVER);
+        }
+        else{
+            user.getRoles().add(Role.ROLE_USER);
+        }
         userRepository.save(user);
         return true;
     }
 
 
-//    public void updateUser(User user){
-//        System.out.println(user.getFName());
-//        User existingUser = userRepository.findById(user.getId()).orElse(null);
-//        existingUser.setFName(user.getFName());
-//        existingUser.setMName(user.getMName());
-//        existingUser.setLName(user.getLName());
-//        existingUser.setPhone(user.getPhone());
-//        userRepository.save(existingUser);
-//    }
-
-    public void changeUserRole(User user, Map<String, String> form){
-        Set<String> roles = Arrays.stream(Role.values())
-                .map(Role::name)
-                .collect(Collectors.toSet());
-        user.getRoles().clear();
-        for (String key : form.keySet()){
-            if (roles.contains(key)){
-                user.getRoles().add(Role.valueOf(key));
-            }
-        }
-        userRepository.save(user);
+    public void updateUser(User user, Principal principal){
+        User existingUser = getUserByPrincipal(principal);
+        existingUser.setFName(user.getFName());
+        existingUser.setMName(user.getMName());
+        existingUser.setLName(user.getLName());
+        existingUser.setPhone(user.getPhone());
+        userRepository.save(existingUser);
     }
 
 }

@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface VehicleRepository extends CrudRepository<Vehicle, Integer> {
     Optional<Vehicle> findById(int id);
     Optional<Vehicle> findByRegNo(String regNo);
-    Optional<Vehicle> findByUser(User user);
+    Vehicle findByUser(User user);
     List<Vehicle> findAllByMaxWeightLessThanEqual(BigDecimal weight);
 
 }

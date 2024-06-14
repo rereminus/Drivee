@@ -11,4 +11,7 @@ import java.util.List;
 public interface TripRepository extends JpaRepository<Trip, Integer> {
     List<Trip> findAllByClient(User user);
     List<Trip> findAllByDriver(User user);
+    List<Trip> findAllByTripStatus(String status);
+
+    Trip findById(int id);
 }

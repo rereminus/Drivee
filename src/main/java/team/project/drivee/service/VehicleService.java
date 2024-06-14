@@ -7,7 +7,6 @@ import team.project.drivee.models.Vehicle;
 import team.project.drivee.repo.UserRepository;
 import team.project.drivee.repo.VehicleRepository;
 
-import java.math.BigDecimal;
 import java.security.Principal;
 
 
@@ -27,21 +26,19 @@ public class VehicleService {
     }
 
 
-    public void addVehicle(Principal principal, String regNo, String brand, String color,
-                           BigDecimal length, BigDecimal width, BigDecimal height,
-                           BigDecimal maxWeight) {
-        Vehicle vehicle = new Vehicle();
-        vehicle.setRegNo(regNo);
-        vehicle.setBrand(brand);
-        vehicle.setColor(color);
-        vehicle.setLength(length);
-        vehicle.setWidth(width);
-        vehicle.setHeight(height);
-        vehicle.setMaxWeight(maxWeight);
-        vehicle.setUser(userService.getUserByPrincipal(principal));
-        Vehicle savedVehicle = vehicleRepository.save(vehicle);
+    public void addVehicle(Vehicle vehicle, Principal principal) {
         User user = userService.getUserByPrincipal(principal);
-        user.setVehicle(savedVehicle);
+        Vehicle newVehicle = new Vehicle();
+        newVehicle.setRegNo(vehicle.getRegNo());
+        newVehicle.setBrand(vehicle.getBrand());
+        newVehicle.setColor(vehicle.getColor());
+        newVehicle.setHeight(vehicle.getHeight());
+        newVehicle.setWidth(vehicle.getWidth());
+        newVehicle.setLength(vehicle.getLength());
+        newVehicle.setMaxWeight(vehicle.getMaxWeight());
+        newVehicle.setUser(user);
+        user.setVehicle(newVehicle);
+        vehicleRepository.save(newVehicle);
         userRepository.save(user);
     }
 }

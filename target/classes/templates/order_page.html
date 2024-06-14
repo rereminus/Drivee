@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страница заказа</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+	 <script src="https://api-maps.yandex.ru/v3/?apikey=d4c30c84-8597-42a1-b916-fedb4bc275e8&suggest_apikey=6d2ad455-7f44-4302-ba2b-90525671a7b0&lang=ru_RU" type="text/javascript"></script>
+	 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	 <style>
+    #startpoint {
+        margin-bottom: 10px;
+    }
+
+    .suggested-locations {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .suggested-locations li {
+        cursor: pointer;
+        padding: 5px;
+        background-color: #eee;
+    }
+
+    .suggested-locations li:hover {
+        background-color: #ccc;
+    }
+	.radio {
+      padding: 0;
+	}
+</style>
+</head>
+<body>
+    <header>
+       <h1>Грузоперевозки - это просто!</h1>
+     </header>
+    <p id="notification"></p>
+    <div id="map" style= "height: 600px"></div>
+
+    <form method="post" action="/order" th:object="${trip}">
+    <label for="startpoint">Начальная точка:</label>
+    <input type="text" id="startpoint" placeholder="Введите геолокацию" th:field="*{pickupLocation}">
+    <ul id="suggested-locations" class="suggested-locations"></ul>
+
+    
+    <label for="endpoint">Конечная точка:</label>
+    <input type="text" id="endpoint" placeholder="Введите геолокацию" th:field="*{pickupLocation}">
+    <ul id="suggested-locations-2" class="suggested-locations"></ul>
+
+    
+    <button type="submit" id="confirmOrder">Подтверждение заказа</button>
+    <button id="orderDetails">Детали заказа</button>
+	
+    
+    <div id="orderDetailsForm" style="display: none;">
+        <label for="description">Описание:</label>
+        <textarea id="description" th:field="*{comment}"></textarea>
+        
+        <label for="tariff">Выбрать тариф:</label>
+        <select id="tariff">
+		    <option value="small">До 700 кг</option>
+            <option value="standard">До 1.5 тонн</option>
+            <option value="premium">До 2 тонн</option>
+            <option value="luxury">До 3.5 тонн</option>
+			<option value="large">До 5 тонн</option>
+        </select>
+        
+        <label for="price">Цена:</label>
+        <input type="text" id="price" style= "width: 250px" th:field="*{tripCost}">
+		
+		<label for="pay">Способ оплаты:</label>
+        <select id="pay">
+		    <option value="cash">Наличные</option>
+            <option value="card">SberPay</option>
+        </select>
+        <label for="payment">Оплата:</label>
+        <input type="text" id="payment" style= "width: 250px">
+		<label>
+        <input type="radio" name="dateTime" id="dateTimePicker" value="dateTime" checked>
+        Выбор даты и времени:
+        <input type="datetime-local" id="dateTimeInput" >
+    </label>
+
+    <label>
+        <input type="radio" name="dateTime" id="nearestTime" value="nearestTime">
+        В ближайшее время
+    </label>
+
+    <button type="submit" onclick="submitDateTime()">Подтвердить</button>
+
+    <script>
+        function submitDateTime() {
+            const dateTimeType = document.querySelector('input[name="dateTime"]:checked').value;
+            if (dateTimeType === 'dateTime') {
+                const selectedDateTime = document.getElementById('dateTimeInput').value;
+                alert(`Выбранная дата и время: ${selectedDateTime}`);
+            } else {
+                const nearestTime = new Date();
+                const minutes = nearestTime.getMinutes() + 15 - (nearestTime.getMinutes() % 15);
+                nearestTime.setMinutes(minutes);
+                alert(`Ближайшее время: ${nearestTime.toLocaleString()}`);
+            }
+        }
+    </script>
+    </div>
+    </form>
+    
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=d4c30c84-8597-42a1-b916-fedb4bc275e8&lang=ru_RU" type="text/javascript"></script>
+    <script src="../static/js/script.js"></script>
+	<script>
+        ymaps.ready(function() {
+            $('#startpoint').on('input', function() {
+                var searchText = $(this).val();
+                if (searchText.length > 0) {
+                    ymaps.geocode(searchText, { results: 5 }).then(function (res) {
+                        $('#suggested-locations').empty();
+                        res.geoObjects.each(function (obj) {
+                            var locationName = obj.properties.get('name');
+                            $('#suggested-locations').append('<li>' + locationName + '</li>');
+                        });
+                    });
+                } else {
+                    $('#suggested-locations').empty();
+                }
+            });
+
+            $('#endpoint').on('input', function() {
+                var searchText = $(this).val();
+                if (searchText.length > 0) {
+                    ymaps.geocode(searchText, { results: 5 }).then(function (res) {
+                        $('#suggested-locations-2').empty();
+                        res.geoObjects.each(function (obj) {
+                            var locationName = obj.properties.get('name');
+                            $('#suggested-locations-2').append('<li>' + locationName + '</li>');
+                        });
+                    });
+                } else {
+                    $('#suggested-locations-2').empty();
+                }
+            });
+
+            $('#suggested-locations').on('click', 'li', function() {
+                $('#startpoint').val($(this).text());
+                $('#suggested-locations').empty();
+            });
+
+            $('#suggested-locations-2').on('click', 'li', function() {
+                $('#endpoint').val($(this).text());
+                $('#suggested-locations-2').empty();
+            });
+        });
+    </script>
+	<script>
+        // Отслеживаем изменения в Local Storage
+        window.addEventListener('storage', function(event) {
+            if (event.key === 'acceptedOrder1') {
+                const acceptedOrder1 = JSON.parse(event.newValue);
+                document.getElementById('notification').innerText = `Заказ принят водителем, ожидайте: \n${acceptedOrder.description}`;
+            }
+        });
+    </script>
+
+</body>
+</html>

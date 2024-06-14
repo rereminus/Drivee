@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Регистрация пользователя</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      background-color: #f9f9f9;
+    }
+
+    .container {
+      width: 400px;
+      height: 540px;
+      position: relative;
+      margin: 6% auto;
+      background: #fff;
+      padding: 5px;
+      overflow: hidden;
+      border: 1px solid #f1f1f1;
+      box-shadow: 0 0 20px 0 #e4e4e4;
+    }
+
+    .tabs {
+      width: 240px;
+      margin: 35px auto;
+      position: relative;
+      box-shadow: 0 0 15px #cacaca;
+      border-radius: 30px;
+    }
+
+    .toggle-btn {
+      padding: 10px 30px;
+      cursor: pointer;
+      background: transparent;
+      border: 0;
+      outline: none;
+      position: relative;
+    }
+
+    #btn {
+      top: 0;
+      left: -20px;
+      position: absolute;
+      width: 130px;
+      height: 100%;
+      background: linear-gradient(to right, #d4ffdd, #ffad05);
+      border-radius: 30px;
+      transition: .5s;
+    }
+
+    .social-icons {
+      margin: 30px auto;
+      text-align: center;
+    }
+
+
+    .form {
+      top: 120px;
+      position: absolute;
+      width: 280px;
+      transition: .5s;
+    }
+
+    .input-filed {
+      width: 100%;
+      padding: 10px 0;
+      margin: 5px 0;
+      border-left: 0;
+      border-top: 0;
+      border-right: 0;
+      border-bottom: 1px solid #999;
+      outline: none;
+      background: transparent;
+    }
+
+    .submit-btn {
+      width: 85%;
+      padding: 10px 30px;
+      cursor: pointer;
+      display: block;
+      margin: auto;
+      background: linear-gradient(to right, #d4ffdd, #ffad05);
+      border: 0;
+      outline: none;
+      border-radius: 30px;
+    }
+
+    .check-box {
+      margin: 30px 10px 30px 0;
+    }
+    header{
+      font-size: 30px;
+      font-weight: 300px;
+      background-image: linear-gradient(to left, #553c9a, #b393d3);
+      color: transparent;
+      position: static;
+      margin: 25px;
+      text-align: center;
+      background-clip: text;
+      -webkit-background-clip: text;
+    }
+     img {
+      border: 0;
+      border-radius: 0;
+      padding: 0;
+      width: 150px;
+      height: 150px;
+      margin-left: 70px;
+    }
+    span {
+      color: #777;
+      font-size: 12px;
+      bottom: 68px;
+      position: absolute;
+    }
+
+    #login {
+      left: 50px;
+    }
+
+    #register {
+      left: 450px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+<h1>Грузоперевозки - это просто!</h1>
+</header>
+  <div class="container">
+    <div class="tabs">
+      <div id="btn"></div>
+      <button type="button" class="toggle-btn" onclick="login()">Вход</button>
+      <button type="button" class="toggle-btn" onclick="registration()">Регистрация</button>
+    </div>
+  
+    <form id="login" class="form" method="post" action="/login">
+      <img src="https://i.postimg.cc/C1sRS5dQ/photo-Bar-C-1.png" alt="logo">      
+      <input type="text" name="username" class="input-filed" placeholder="Номер телефона">
+      <input type="password" name="password" class="input-filed" placeholder="Пароль">
+      <input type="checkbox" class="check-box"><span>Запомнить пароль</span>
+      <button type="submit" class="submit-btn">Вход</button>
+    </form>
+
+    <form id="register" method="post" class="form" action="/registration">
+      <img src="https://i.postimg.cc/C1sRS5dQ/photo-Bar-C-1.png" alt="logo">      
+      <input type="text" name="phone" class="input-filed" placeholder="Номер телефона">
+      <input type="email" name="email" class="input-filed" placeholder="Email">
+      <input type="password" name="password" class="input-filed" placeholder="Пароль">
+      <input type="checkbox" class="check-box" value="true" name="checkV"><span>Я водитель</span>
+      <button type="submit" class="submit-btn">Регистрация</button>
+    </form>
+  </div>
+
+  <script>
+    var logIn = document.getElementById("login");
+    var register = document.getElementById("register");
+    var button = document.getElementById("btn");
+
+    function registration() {
+      logIn.style.left = "-400px";
+      register.style.left = "50px";
+      button.style.left = "110px";
+    }
+
+    function login() {
+      logIn.style.left = "50px";
+      register.style.left = "450px";
+      button.style.left = "-20px";
+    }
+  </script>
+</body>
+</html>

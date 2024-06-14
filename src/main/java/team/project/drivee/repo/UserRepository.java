@@ -8,4 +8,5 @@ import team.project.drivee.models.User;
 public interface UserRepository extends JpaRepository<User, Integer> {
     User findById(int id);
     User findByEmail(String email);
+    User findByPhone(String phone);
 }

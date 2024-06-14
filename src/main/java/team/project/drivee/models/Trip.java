@@ -6,7 +6,6 @@ import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.time.OffsetTime;
 
 @Entity
 @Table(name = "trips")
@@ -21,28 +20,25 @@ public class Trip {
     @Column(name = "start_time", nullable = false)
     private OffsetDateTime startTime;
 
-    @Column(name = "end_time", nullable = false)
+    @Column(name = "end_time")
     private OffsetDateTime endTime;
 
-    @Column(name = "wait_time")
-    private OffsetTime waitTime;
-
-    @Column(name = "created_time"/*, nullable = false*/)
+    @Column(name = "created_time", nullable = false)
     private OffsetDateTime createdTime;
 
-    @Column(name = "pickup_location", /*nullable = false,*/ length = Integer.MAX_VALUE)
+    @Column(name = "pickup_location", nullable = false, length = Integer.MAX_VALUE)
     private String pickupLocation;
 
-    @Column(name = "dropoff_location"/*, nullable = false*/, length = Integer.MAX_VALUE)
+    @Column(name = "dropoff_location", nullable = false, length = Integer.MAX_VALUE)
     private String dropoffLocation;
 
     @Column(name = "comment", length = Integer.MAX_VALUE)
     private String comment;
 
-    @Column(name = "trip_cost"/*, nullable = false*/, precision = 7, scale = 2)
+    @Column(name = "trip_cost", nullable = false, precision = 7, scale = 2)
     private BigDecimal tripCost;
 
-    @Column(name = "trip_status"/*, nullable = false*/, length = 10)
+    @Column(name = "trip_status", nullable = false, length = 10)
     private String tripStatus;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -55,6 +51,9 @@ public class Trip {
     @ColumnDefault("false")
     @Column(name = "payment_type")
     private Boolean paymentType;
+
+    @Column(name = "tarif", length = 15)
+    private String tarif;
 
     public Boolean getPaymentType() {
         return paymentType;
@@ -86,14 +85,6 @@ public class Trip {
 
     public void setEndTime(OffsetDateTime endTime) {
         this.endTime = endTime;
-    }
-
-    public OffsetTime getWaitTime() {
-        return waitTime;
-    }
-
-    public void setWaitTime(OffsetTime waitTime) {
-        this.waitTime = waitTime;
     }
 
     public OffsetDateTime getCreatedTime() {
@@ -154,6 +145,14 @@ public class Trip {
 
     public User getDriver() {
         return driver;
+    }
+
+    public String getTarif() {
+        return tarif;
+    }
+
+    public void setTarif(String tarif) {
+        this.tarif = tarif;
     }
 
     public void setDriver(User driver) {

@@ -1,27 +1,26 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Автомобиль</title>
+    <link rel="stylesheet" href="/static/css/styles_.css">
 </head>
 <body>
-<form method="post" action="/account/vehicle" th:object="${vehicle}">
-    <label for="regNo">Рег номер</label>
-    <input type="text" id="regNo" name="regNo" th:field="*{regNo}" required>
-    <label for="brand">Бренд</label>
-    <input type="text" id="brand" name="brand" required>
-    <label for="color">Цвет</label>
-    <input type="text" id="color" name="color" required>
-    <label for="length">Длина</label>
-    <input type="number" id="length" name="length" required>
-    <label for="width">Ширина</label>
-    <input type="number" id="width" name="width" required>
-    <label for="height">Высота</label>
-    <input type="number" id="height" name="height" required>
-    <label for="maxWeight">Максимальный вес</label>
-    <input type="number" id="maxWeight" name="maxWeight" required>
-    <input type="submit" value="Добавить автомобиль">
-</form>
-<span th:field="${errorMsg}"></span>>
+<h1>Автомобиль</h1>
+<div class="user-info">
+    <form method="post" th:object="${vehicle}">
+        <p><strong>Регистрационный номер:</strong> <input type="text" class="input-filed" placeholder="Регистрационный номер" th:field="*{regNo}"></p>
+        <p><strong>Марка автомобиля:</strong> <input type="text" class="input-filed" placeholder="Марка" th:field="*{brand}"></p>
+        <p><strong>Цвет:</strong> <input type="text" class="input-filed" placeholder="Цвет" th:field="*{color}"></p>
+        <p><strong>Длина кузова (м):</strong> <input type="number" step="0.1" class="input-filed" placeholder="Длина" th:field="*{length}"></p>
+        <p><strong>Ширина кузова (м):</strong> <input type="number" step="0.1" class="input-filed" placeholder="Ширина" th:field="*{width}"></p>
+        <p><strong>Высота кузова (м):</strong> <input type="number" step="0.1" class="input-filed" placeholder="Высота" th:field="*{height}"></p>
+        <p><strong>Грузоподъёмность (кг):</strong> <input type="number" step="100" class="input-filed" placeholder="Грузоподъёмность" th:field="*{maxWeight}"></p>
+        <p><button type="submit" class="submit-btn">Сохранить</button><p>
+    </form>
+    <p><button type="submit" onclick="location.href='http://localhost:8080/account';" class="submit-btn">Вернуться в аккаунт</button><p>
+</div>
 </body>
 </html>

@@ -1,5 +1,4 @@
 CREATE TYPE public.role_name AS ENUM (
-    'ROLE_ADMIN',
     'ROLE_USER',
     'ROLE_DRIVER'
 );
@@ -12,17 +11,17 @@ CREATE TABLE public.roles_project (
 CREATE TABLE public.trips (
     id integer NOT NULL,
     start_time timestamp with time zone NOT NULL,
-    end_time timestamp with time zone NOT NULL,
-    wait_time time with time zone,
+    end_time timestamp with time zone,
     created_time timestamp with time zone NOT NULL,
     pickup_location text NOT NULL,
     dropoff_location text NOT NULL,
+    tariff character varying(15) NOT NULL,
     comment text,
     trip_cost numeric(7,2) NOT NULL,
     trip_status character varying(10) NOT NULL,
     client_id integer NOT NULL,
     driver_id integer,
-    payment_type boolean DEFAULT false,
+    payment_type boolean,
     PRIMARY KEY (id)
 );
 

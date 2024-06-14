@@ -115,7 +115,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return phone;
     }
 
     public void setPassword(String password) {

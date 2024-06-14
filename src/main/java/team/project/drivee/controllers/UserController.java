@@ -5,9 +5,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import team.project.drivee.models.Enum.Role;
 import team.project.drivee.models.User;
+import team.project.drivee.models.Vehicle;
 import team.project.drivee.repo.UserRepository;
+import team.project.drivee.repo.VehicleRepository;
 import team.project.drivee.service.UserService;
 
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.Map;
@@ -16,29 +19,30 @@ import java.util.Map;
 public class UserController {
     private final UserService userService;
     private final UserRepository userRepository;
+    private final VehicleRepository vehicleRepository;
 
-    public UserController(UserService userService, UserRepository userRepository) {
+    public UserController(UserService userService, UserRepository userRepository, VehicleRepository vehicleRepository) {
         this.userService = userService;
         this.userRepository = userRepository;
+        this.vehicleRepository = vehicleRepository;
     }
 
     @GetMapping("/registration")
     public String getRegistrationPage(Model model, Principal principal) {
         model.addAttribute("user", userService.getUserByPrincipal(principal));
-        return "register_page";
+        return "reg";
     }
 
     @GetMapping("/login")
     public String getLoginPage(Model model, Principal principal) {
         model.addAttribute("user", userService.getUserByPrincipal(principal));
-        return "login_page";
+        return "reg";
     }
 
     @PostMapping("/registration")
-    public String Register(User user, Model model) {
-        if (!userService.registerUser(user)) {
-            model.addAttribute("errorMsg", "Пользователь с email: " + user.getEmail() + " уже существует");
-            return "register_page";
+    public String Register(User user, @RequestParam(value = "checkV",defaultValue = "false") boolean chekV) {
+        if (!userService.registerUser(user, chekV)) {
+            return "reg";
         }
         return "redirect:/login";
     }
@@ -47,21 +51,25 @@ public class UserController {
     public String PersonalAccount(Model model, Principal principal) {
         User user = userService.getUserByPrincipal(principal);
         model.addAttribute("user", user);
-        model.addAttribute("roles", Arrays.stream(Role.values()).filter(r -> !r.name().equals("ROLE_ADMIN")).toArray());
-        return "personal_page";
+        if (user.getRoles().contains(Role.ROLE_USER)) {
+            return "lkU";
+        }
+        else if (user.getRoles().contains(Role.ROLE_DRIVER)) {
+            Vehicle vehicle = vehicleRepository.findByUser(user);
+            if (vehicle != null) {
+                model.addAttribute("vehicle", vehicle);
+                BigDecimal capacity = vehicle.getHeight().multiply(vehicle.getLength().multiply(vehicle.getWidth()));
+                model.addAttribute("capacity", capacity);
+            }
+            return "lkV";
+        }
+        else return "redirect:/admin";
     }
 
     @PostMapping("/account")
-    public String updateAccount(Principal principal,@RequestParam("userId") User user, @RequestParam Map<String, String> form) {
-        //userService.updateUser(user);
-        userService.changeUserRole(user, form);
+    public String updateAccount(Principal principal, User user) {
+        userService.updateUser(user, principal);
         return "redirect:/account";
     }
-
-//    @PostMapping("/account/role")
-//    public String changeRole(@RequestParam("userId") User user, @RequestParam Map<String, String> form){
-//        userService.changeUserRole(user, form);
-//        return "redirect:/account";
-//    }
 
 }

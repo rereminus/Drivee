@@ -20,13 +20,30 @@ public class TripService {
         this.tripRepository = tripRepository;
     }
 
-    public List<Vehicle> findDriver(BigDecimal weight){
-        return  vehicleRepository.findAllByMaxWeightLessThanEqual(weight);
-    }
+//    public List<Vehicle> findDriver(BigDecimal weight){
+//        return  vehicleRepository.findAllByMaxWeightLessThanEqual(weight);
+//    }
 
     public void addTrip(Trip trip){
+        Trip newTrip = new Trip();
+        newTrip.setCreatedTime(trip.getCreatedTime());
+        newTrip.setDriver(trip.getDriver());
+        newTrip.setStartTime(trip.getStartTime());
+        newTrip.setEndTime(trip.getEndTime());
+        newTrip.setClient(trip.getClient());
+        newTrip.setPickupLocation(trip.getPickupLocation());
+        newTrip.setDropoffLocation(trip.getDropoffLocation());
+        newTrip.setComment(trip.getComment());
+        newTrip.setTripCost(trip.getTripCost());
+        newTrip.setTripStatus("Создан");
+        newTrip.setTarif(trip.getTarif());
+        newTrip.setPaymentType(trip.getPaymentType());
         tripRepository.save(trip);
     }
 
+    public void confirmTrip(Trip trip){
+        Trip existingTrip = tripRepository.findById(trip.getId()).orElse(null);
+        existingTrip.setDriver(trip.getDriver());
+    }
 
 }
