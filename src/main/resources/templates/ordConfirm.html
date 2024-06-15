@@ -57,8 +57,9 @@
 </head>
 <body>
     <h1>Список заказов</h1>
+    <form action="/orders" method="post">
     <table>
-        <tr th:each>
+        <tr>
             <th>Начальная точка</th>
             <th>Конечная точка</th>
             <th>Описание</th>
@@ -68,17 +69,18 @@
             <th>Дата и время</th>
             <th>Принять заказ</th>
         </tr>
-        <tr>
-            <td id="startPoint"></td>
-            <td id="endPoint"></td>
-            <td id="description"></td>
-            <td id="tariff"></td>
-            <td id="price"></td>
-            <td id="paymentMethod"></td>
-            <td id="dateTime"></td>
-            <td><button class="accept-button" onclick="acceptOrder()">Принять</button></td>
+        <tr th:each="trip : ${foundOrders}">
+            <td id="startPoint" th:text="${trip.pickupLocation}"></td>
+            <td id="endPoint" th:text="${trip.dropoffLocation}"></td>
+            <td id="description" th:text="${trip.comment}"></td>
+            <td id="tariff" th:text="${trip.tarif}"></td>
+            <td id="price" th:text="${trip.tripCost}"></td>
+            <td id="paymentMethod" th:text="${trip.paymentType} ? 'SberPay' : 'Наличные'"></td>
+            <td id="dateTime" th:text="${#temporals.format(trip.startTime, 'dd-MM-yyyy HH:mm')}"></td>
+            <td><button type="submit" class="accept-button" onclick="acceptOrder()">Принять</button></td>
         </tr>
     </table>
+    </form>
 
     <script>
         function acceptOrder() {

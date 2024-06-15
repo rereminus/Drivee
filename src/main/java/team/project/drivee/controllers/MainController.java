@@ -15,7 +15,10 @@ import team.project.drivee.service.UserService;
 import team.project.drivee.service.VehicleService;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Objects;
 
@@ -45,15 +48,17 @@ public class MainController {
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @PostMapping("/order")
-    public String tripStart(@ModelAttribute("trip") Trip trip, Model model, Principal principal, @RequestParam("tariff") String tariff,
-                            @RequestParam("pay") String pay) {
+    public String tripStart(@ModelAttribute("trip") Trip trip, Principal principal,
+                            @RequestParam(value="dateTime", required = false) String dateTime,
+                            @RequestParam(value="dateTimeInput", required = false) LocalDateTime dateTimeInput) {
         trip.setCreatedTime(OffsetDateTime.now());
-        trip.setTarif(tariff);
-        System.out.println(tariff);
-        Boolean payT;
-        payT = Objects.equals(pay, "cash");
-        System.out.println(payT);
-        trip.setPaymentType(payT);
+        if (!Objects.equals(dateTime, "dateTime") || dateTimeInput == null) {
+            trip.setStartTime(OffsetDateTime.now());
+        }
+        else{
+            ZoneId zoneId = ZoneId.systemDefault();
+            trip.setStartTime(dateTimeInput.atZone(zoneId).toOffsetDateTime());
+        }
         trip.setClient(userService.getUserByPrincipal(principal));
         tripService.addTrip(trip);
         return "order_page";
@@ -62,48 +67,16 @@ public class MainController {
     @PreAuthorize("hasAuthority('ROLE_DRIVER')")
     @GetMapping("/orders")
     public String ordersInfo(Model model) {
-        List<Trip> found = tripRepository.findAll();
+        List<Trip> foundOrders = tripRepository.findAllByTripStatus("Создан");
+        model.addAttribute("foundOrders", foundOrders);
         return "ordConfirm";
     }
 
-    @PreAuthorize("hasAuthority('ROLE_DRIVER')")
-    @PostMapping("/orders")
-    public String ordersConfirm(Model model) {
-
-        return "ordConfirm";
-    }
-
-
-//    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
-//    @PostMapping("/trip")
-//    public String tripAdd(Model model, Trip trip) {
-//        trip.setCreatedTime(OffsetDateTime.from(java.time.LocalDateTime.now()));
-//        tripService.addTrip(trip);
-//        return "trip";
-//    }
-//
-//    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
-//    @GetMapping("/trip/find")
-//    public String tripFind(Model model) {
-//        model.addAttribute("trip", new Trip());
-//        return "find_driver";
-//    }
-//
-//    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
-//    @PostMapping("/trip/find")
-//    public String createTrip(Model model, Principal principal, @RequestParam BigDecimal weight) {
-//        List<Vehicle> found = tripService.findDriver(weight);
-//        model.addAttribute("foundDrivers", found);
-//        for(Vehicle vehicle: found) {
-//            System.out.println(vehicle.getRegNo());
-//        }
-//        return "redirect:/trip/found";
-//    }
-//
-//    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
-//    @GetMapping("/trip/found")
-//    public String tripFound(Model model, @RequestParam List<Vehicle> vehicles) {
-//        model.addAttribute("foundVehicles", vehicles);
-//        return "redirect:/trip";
+//    @PreAuthorize("hasAuthority('ROLE_DRIVER')")
+//    @PostMapping("/orders")
+//    public String ordersConfirm(Model model, @ModelAttribute("trip") Trip trip, Principal principal) {
+//        trip.setDriver(userService.getUserByPrincipal(principal));
+//        tripService.confirmTrip(trip);
+//        return "ordConfirm";
 //    }
 }

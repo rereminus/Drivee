@@ -46,12 +46,12 @@
 
     
     <label for="endpoint">Конечная точка:</label>
-    <input type="text" id="endpoint" placeholder="Введите геолокацию" th:field="*{pickupLocation}">
+    <input type="text" id="endpoint" placeholder="Введите геолокацию" th:field="*{dropoffLocation}">
     <ul id="suggested-locations-2" class="suggested-locations"></ul>
 
-    
-    <button type="submit" id="confirmOrder">Подтверждение заказа</button>
-    <button id="orderDetails">Детали заказа</button>
+
+    <button id="confirmOrder">Подтверждение заказа</button>
+    <button type="button" id="orderDetails">Детали заказа</button>
 	
     
     <div id="orderDetailsForm" style="display: none;">
@@ -59,28 +59,28 @@
         <textarea id="description" th:field="*{comment}"></textarea>
         
         <label for="tariff">Выбрать тариф:</label>
-        <select id="tariff">
-		    <option value="small">До 700 кг</option>
-            <option value="standard">До 1.5 тонн</option>
-            <option value="premium">До 2 тонн</option>
-            <option value="luxury">До 3.5 тонн</option>
-			<option value="large">До 5 тонн</option>
+        <select id="tariff" th:field="*{tarif}">
+		    <option th:value="'До 700 кг'">До 700 кг</option>
+            <option th:value="'До 1.5 тонн'">До 1.5 тонн</option>
+            <option th:value="'До 2 тонн'">До 2 тонн</option>
+            <option th:value="'До 3.5 тонн'">До 3.5 тонн</option>
+			<option th:value="'До 5 тонн'">До 5 тонн</option>
         </select>
         
         <label for="price">Цена:</label>
         <input type="text" id="price" style= "width: 250px" th:field="*{tripCost}">
 		
 		<label for="pay">Способ оплаты:</label>
-        <select id="pay">
-		    <option value="cash">Наличные</option>
-            <option value="card">SberPay</option>
+        <select id="pay" th:field="*{paymentType}">
+		    <option th:value="false" value="cash">Наличные</option>
+            <option th:value="true" value="card">SberPay</option>
         </select>
         <label for="payment">Оплата:</label>
         <input type="text" id="payment" style= "width: 250px">
 		<label>
         <input type="radio" name="dateTime" id="dateTimePicker" value="dateTime" checked>
         Выбор даты и времени:
-        <input type="datetime-local" id="dateTimeInput" >
+        <input type="datetime-local" id="dateTimeInput" name="dateTimeInput">
     </label>
 
     <label>

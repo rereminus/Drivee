@@ -35,7 +35,7 @@ public class Trip {
     @Column(name = "comment", length = Integer.MAX_VALUE)
     private String comment;
 
-    @Column(name = "trip_cost", nullable = false, precision = 7, scale = 2)
+    @Column(name = "trip_cost", precision = 7, scale = 2)
     private BigDecimal tripCost;
 
     @Column(name = "trip_status", nullable = false, length = 10)
@@ -44,7 +44,7 @@ public class Trip {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "client_id", nullable = false)
     private User client;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "driver_id")
     private User driver;
 

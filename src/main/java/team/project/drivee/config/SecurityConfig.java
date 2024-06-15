@@ -40,7 +40,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/order", true)
+                        .defaultSuccessUrl("/account", true)
                         .permitAll())
                 .build();
     }

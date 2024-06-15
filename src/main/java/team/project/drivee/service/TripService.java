@@ -14,20 +14,17 @@ public class TripService {
 
     private final VehicleRepository vehicleRepository;
     private final TripRepository tripRepository;
+    private final UserService userService;
 
-    public TripService(VehicleRepository vehicleRepository, TripRepository tripRepository) {
+    public TripService(VehicleRepository vehicleRepository, TripRepository tripRepository, UserService userService) {
         this.vehicleRepository = vehicleRepository;
         this.tripRepository = tripRepository;
+        this.userService = userService;
     }
-
-//    public List<Vehicle> findDriver(BigDecimal weight){
-//        return  vehicleRepository.findAllByMaxWeightLessThanEqual(weight);
-//    }
 
     public void addTrip(Trip trip){
         Trip newTrip = new Trip();
         newTrip.setCreatedTime(trip.getCreatedTime());
-        newTrip.setDriver(trip.getDriver());
         newTrip.setStartTime(trip.getStartTime());
         newTrip.setEndTime(trip.getEndTime());
         newTrip.setClient(trip.getClient());
@@ -38,12 +35,15 @@ public class TripService {
         newTrip.setTripStatus("Создан");
         newTrip.setTarif(trip.getTarif());
         newTrip.setPaymentType(trip.getPaymentType());
-        tripRepository.save(trip);
+        tripRepository.save(newTrip);
     }
 
-    public void confirmTrip(Trip trip){
-        Trip existingTrip = tripRepository.findById(trip.getId()).orElse(null);
-        existingTrip.setDriver(trip.getDriver());
-    }
+//    public void confirmTrip(Trip trip){
+//        Trip existingTrip = tripRepository.findById(trip.getId()).orElse(null);
+//        existingTrip.setDriver(trip.getDriver());
+//        existingTrip.setTripStatus("Выполняется");
+//        existingTrip.setDriver(trip.getDriver());
+//        tripRepository.save(existingTrip);
+//    }
 
 }
