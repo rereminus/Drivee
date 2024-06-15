@@ -70,4 +70,5 @@ location.get({
     //         paymentInput.value = 'Введите номер телефона';
     //     }
     // });
+
 });
