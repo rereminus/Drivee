@@ -60,14 +60,14 @@ location.get({
         } 
     });
 	
-    var paySelect = document.getElementById('pay');
-    var paymentInput = document.getElementById('payment');    
-    paySelect.addEventListener('change', function() {
-        var selectedPay = paySelect.value;
-        if (selectedPay === 'cash') {
-            paymentInput.value = 'Оплата водителю лично'; 
-        } else if (selectedPay === 'card') {
-            paymentInput.value = 'Введите номер телефона'; 
-        } 
-    });
+    // var paySelect = document.getElementById('pay');
+    // var paymentInput = document.getElementById('payment');
+    // paySelect.addEventListener('change', function() {
+    //     var selectedPay = paySelect.value;
+    //     if (selectedPay === 'cash') {
+    //         paymentInput.value = 'Оплата водителю лично';
+    //     } else if (selectedPay === 'card') {
+    //         paymentInput.value = 'Введите номер телефона';
+    //     }
+    // });
 });
