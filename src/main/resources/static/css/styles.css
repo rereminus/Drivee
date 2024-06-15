@@ -22,6 +22,8 @@ label, input, select {
     border-bottom: 1px solid #999;
     outline: none;
     background: transparent;
+	margin-left: auto;
+    margin-right: auto;
 }
 
 button {
@@ -53,3 +55,4 @@ header{
       background-clip: text;
       -webkit-background-clip: text;
     }
+
